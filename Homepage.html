@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DaveOS Command Center — Stable Edition</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #111;
+        color: #eee;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+    header {
+        background: #1f1f1f;
+        padding: 20px;
+        text-align: center;
+        font-size: 26px;
+        font-weight: 600;
+        color: #fff;
+        letter-spacing: 0.05em;
+    }
+    .container {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+    .widget {
+        background: #1a1a1a;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 0 12px rgba(0,0,0,0.6);
+        border: 1px solid #333;
+    }
+    .widget h2 {
+        margin-top: 0;
+        font-size: 18px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 6px;
+    }
+    a {
+        color: #4da3ff;
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+    ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 8px 0;
+    }
+    ul li {
+        margin: 4px 0;
+    }
+    textarea {
+        width: 100%;
+        height: 140px;
+        background: #101010;
+        color: #eee;
+        border-radius: 6px;
+        border: 1px solid #333;
+        padding: 8px;
+        resize: vertical;
+    }
+    .todo-item {
+        display: flex;
+        align-items: center;
+        margin: 4px 0;
+    }
+    .todo-item input[type="checkbox"] {
+        margin-right: 8px;
+    }
+    .small-note {
+        font-size: 11px;
+        color: #aaa;
+        margin-top: 6px;
+    }
+    .btn {
+        display: inline-block;
+        padding: 6px 10px;
+        margin: 3px 2px;
+        border-radius: 6px;
+        border: 1px solid #444;
+        background: #222;
+        color: #eee;
+        font-size: 13px;
+        cursor: pointer;
+    }
+    .btn:hover {
+        background: #333;
+    }
+    .img-box {
+        text-align: center;
+    }
+    .img-box img {
+        max-width: 100%;
+        border-radius: 8px;
+        margin-top: 8px;
+    }
+    .img-caption {
+        font-size: 12px;
+        color: #ccc;
+        margin-top: 4px;
+    }
+</style>
+</head>
+
+<body>
+
+<header>DaveOS Command Center — Stable Edition</header>
+
+<div class="container">
+
+    <!-- WEATHER -->
+    <div class="widget">
+        <h2>Weather — 5 Day Forecast (Manahawkin, NJ)</h2>
+        <iframe
+            src="https://forecast7.com/en/39d70n74d26/manahawkin/?unit=us"
+            frameborder="0"
+            style="width:100%; height:260px; border:none;">
+        </iframe>
+    </div>
+
+    <!-- NEWS: DOGS -->
+    <div class="widget">
+        <h2>News — Dogs (Top 5)</h2>
+        <ul id="news-dogs"><li>Loading...</li></ul>
+    </div>
+
+    <!-- NEWS: GENERAL -->
+    <div class="widget">
+        <h2>News — Top Stories (Top 5)</h2>
+        <ul id="news-general"><li>Loading...</li></ul>
+    </div>
+
+    <!-- ADHD / BIPOLAR / SPINAL -->
+    <div class="widget">
+        <h2>News — ADHD / Bipolar / Spinal</h2>
+        <strong>ADHD</strong>
+        <ul id="news-adhd"><li>Loading...</li></ul>
+        <strong>Bipolar</strong>
+        <ul id="news-bipolar"><li>Loading...</li></ul>
+        <strong>Spinal Procedures</strong>
+        <ul id="news-spinal"><li>Loading...</li></ul>
+    </div>
+
+    <!-- UPLIFTING -->
+    <div class="widget">
+        <h2>News — Uplifting Stories</h2>
+        <ul id="news-uplifting"><li>Loading...</li></ul>
+    </div>
+
+    <!-- PUPPIES + TROPICAL -->
+    <div class="widget">
+        <h2>Puppies & Tropical Views of the Day</h2>
+        <div class="img-box">
+            <strong>Cute Puppy of the Day</strong>
+            <img id="puppy-img">
+            <div class="img-caption">Location available on Unsplash page</div>
+        </div>
+        <div class="img-box" style="margin-top:12px;">
+            <strong>Tropical View of the Day</strong>
+            <img id="tropical-img">
+            <div class="img-caption">Location available on Unsplash page</div>
+        </div>
+    </div>
+
+    <!-- TO-DO -->
+    <div class="widget">
+        <h2>To‑Do List</h2>
+        <div id="todo-list"></div>
+        <button class="btn" onclick="addTodo()">Add Item</button>
+    </div>
+
+    <!-- SEARCH ENGINES -->
+    <div class="widget">
+        <h2>Search Engines</h2>
+        <button class="btn" onclick="openUrl('https://www.google.com')">Google</button>
+        <button class="btn" onclick="openUrl('https://www.bing.com')">Bing</button>
+        <button class="btn" onclick="openUrl('https://duckduckgo.com')">DuckDuckGo</button>
+        <button class="btn" onclick="openUrl('https://search.brave.com')">Brave</button>
+        <button class="btn" onclick="openUrl('https://www.startpage.com')">Startpage</button>
+        <button class="btn" onclick="openUrl('https://www.yahoo.com')">Yahoo</button>
+    </div>
+
+    <!-- BOOKMARKS -->
+    <div class="widget">
+        <h2>Bookmarks</h2>
+        <ul>
+            <li><a href="chrome://bookmarks" target="_blank">Chrome Bookmarks</a></li>
+            <li><a href="edge://favorites" target="_blank">Edge Favorites</a></li>
+            <li><span style="font-size:12px;color:#aaa;">Safari: Bookmarks → Edit Bookmarks</span></li>
+        </ul>
+    </div>
+
+    <!-- AI TOOLS -->
+    <div class="widget">
+        <h2>AI Tools Hub</h2>
+        <button class="btn" onclick="openUrl('https://copilot.microsoft.com')">Copilot (You)</button>
+        <button class="btn" onclick="openUrl('https://chat.openai.com')">ChatGPT</button>
+        <button class="btn" onclick="openUrl('https://claude.ai')">Claude</button>
+        <button class="btn" onclick="openUrl('https://gemini.google.com')">Gemini</button>
+        <button class="btn" onclick="openUrl('https://www.perplexity.ai')">Perplexity</button>
+        <button class="btn" onclick="openUrl('https://www.midjourney.com/home')">Midjourney</button>
+        <button class="btn" onclick="openUrl('https://leonardo.ai')">Leonardo</button>
+        <button class="btn" onclick="openUrl('https://playgroundai.com')">Playground</button>
+        <button class="btn" onclick="openUrl('https://runwayml.com')">RunwayML</button>
+        <button class="btn" onclick="openUrl('https://elevenlabs.io')">ElevenLabs</button>
+        <button class="btn" onclick="openUrl('https://poe.com')">Poe</button>
+        <button class="btn" onclick="openUrl('https://huggingface.co/spaces')">HuggingFace</button>
+        <button class="btn" onclick="openUrl('https://notebooklm.google.com')">NotebookLM</button>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="widget">
+        <h2>Quick Actions</h2>
+        <button class="btn" onclick="openUrl('sms:')">Text Message</button>
+        <button class="btn" onclick="openUrl('https://www.messenger.com/t/')">Messenger</button>
+        <button class="btn" onclick="openUrl('mailto:')">Email</button>
+        <button class="btn" onclick="openUrl('spotify:')">Spotify</button>
+    </div>
+
+    <!-- NOTES -->
+    <div class="widget">
+        <h2>Notes</h2>
+        <textarea id="notes-box"></textarea>
+    </div>
+
+    <!-- SOLITAIRE -->
+    <div class="widget">
+        <h2>Solitaire</h2>
+        <iframe
+            src="https://cardgames.io/solitaire/"
+            frameborder="0"
+            style="width:100%; height:260px; border:none;">
+        </iframe>
+    </div>
+
+</div>
+
+<script>
+function openUrl(url) {
+    window.open(url, "_blank");
+}
+
+function loadJSONNews(query, elementId) {
+    const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(
+        "https://gnews.io/api/v4/search?q=" + query + "&lang=en&country=us&max=5&apikey=demo"
+    )}`;
+
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            const ul = document.getElementById(elementId);
+            ul.innerHTML = "";
+            data.articles.forEach(a => {
+                const li = document.createElement("li");
+                li.innerHTML = `<a href="${a.url}" target="_blank">${a.title}</a>`;
+                ul.appendChild(li);
+            });
+        })
+        .catch(() => {
+            document.getElementById(elementId).innerHTML = "<li>Unable to load news.</li>";
+        });
+}
+
+function loadAllNews() {
+    loadJSONNews("dogs", "news-dogs");
+    loadJSONNews("breaking news", "news-general");
+    loadJSONNews("ADHD", "news-adhd");
+    loadJSONNews("bipolar disorder", "news-bipolar");
+    loadJSONNews("spinal surgery", "news-spinal");
+    loadJSONNews("good news OR uplifting", "news-uplifting");
+}
+
+function loadImages() {
+    document.getElementById("puppy-img").src =
+        "https://source.unsplash.com/random/600x400/?puppy,dog";
+    document.getElementById("tropical-img").src =
+        "https://source.unsplash.com/random/600x400/?tropical,beach,island";
+}
+
+function loadTodos() {
+    const list = document.getElementById("todo-list");
+    list.innerHTML = "";
+    const todos = JSON.parse(localStorage.getItem("daveos-todos") || "[]");
+    todos.forEach((t, i) => {
+        const div = document.createElement("div");
+        div.className = "todo-item";
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = t.done;
+        cb.onchange = () => {
+            todos[i].done = cb.checked;
+            localStorage.setItem("daveos-todos", JSON.stringify(todos));
+        };
+        const span = document.createElement("span");
+        span.textContent = t.text;
+        div.appendChild(cb);
+        div.appendChild(span);
+        list.appendChild(div);
+    });
+}
+
+function addTodo() {
+    const text = prompt("New item:");
+    if (!text) return;
+    const todos = JSON.parse(localStorage.getItem("daveos-todos") || "[]");
+    todos.push({ text, done: false });
+    localStorage.setItem("daveos-todos", JSON.stringify(todos));
+    loadTodos();
+}
+
+function loadNotes() {
+    document.getElementById("notes-box").value =
+        localStorage.getItem("daveos-notes") || "";
+}
+
+document.getElementById("notes-box").addEventListener("input", function () {
+    localStorage.setItem("daveos-notes", this.value);
+});
+
+window.onload = () => {
+    loadAllNews();
+    loadImages();
+    loadTodos();
+    loadNotes();
+};
+</script>
+
+</body>
+</html>
