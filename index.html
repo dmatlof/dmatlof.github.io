@@ -1,354 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>DaveOS Command Center - Stable Edition</title>
-
-<style>
+  <meta charset="UTF-8">
+  <title>DaveOS • 08050 Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #020617;
+      --panel: #020617;
+      --panel-inner: #0f172a;
+      --accent: #38bdf8;
+      --accent-soft: #1d4ed8;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --error: #f97373;
+    }
+    * {
+      box-sizing: border-box;
+    }
     body {
-        margin: 0;
-        padding: 0;
-        background: #111;
-        color: #eee;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 55%, #000 100%);
+      color: var(--text-main);
     }
-
     header {
-        background: #1f1f1f;
-        padding: 20px;
-        text-align: center;
-        font-size: 26px;
-        font-weight: 600;
-        color: #fff;
-        letter-spacing: 0.05em;
+      padding: 18px 22px 10px;
+      border-bottom: 1px solid #1f2937;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
     }
-
-    .container {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 20px;
-        padding: 20px;
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      letter-spacing: 0.06em;
     }
-
+    header .meta {
+      text-align: right;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    header .meta div {
+      line-height: 1.3;
+    }
+    main {
+      padding: 18px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
     .widget {
-        background: #1a1a1a;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 0 12px rgba(0,0,0,0.6);
-        border: 1px solid #333;
+      background: var(--panel-inner);
+      border-radius: 16px;
+      padding: 14px 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.55);
+      border: 1px solid #1f2937;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
     }
-
-    .widget h2 {
-        margin-top: 0;
-        font-size: 18px;
-        border-bottom: 1px solid #333;
-        padding-bottom: 6px;
+    .widget-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
     }
-
-    a {
-        color: #4da3ff;
-        text-decoration: none;
+    .widget-header h2 {
+      margin: 0;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #f9fafb;
     }
-
-    a:hover {
-        text-decoration: underline;
+    .widget-header small {
+      font-size: 0.78rem;
+      color: var(--text-muted);
     }
-
-    ul {
-        list-style: none;
-        padding-left: 0;
-        margin: 8px 0;
+    .list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      flex: 1;
     }
-
-    ul li {
-        margin: 4px 0;
+    .list li {
+      margin-bottom: 6px;
+      font-size: 0.9rem;
     }
-
-    textarea {
-        width: 100%;
-        height: 140px;
-        background: #101010;
-        color: #eee;
-        border-radius: 6px;
-        border: 1px solid #333;
-        padding: 8px;
-        resize: vertical;
+    .list a {
+      color: var(--accent);
+      text-decoration: none;
     }
-
-    .todo-item {
-        display: flex;
-        align-items: center;
-        margin: 4px 0;
+    .list a:hover {
+      text-decoration: underline;
     }
-
-    .todo-item input[type="checkbox"] {
-        margin-right: 8px;
+    .error {
+      color: var(--error);
+      font-size: 0.85rem;
+      margin-top: 4px;
     }
-
-    .btn {
-        display: inline-block;
-        padding: 6px 10px;
-        margin: 3px 2px;
-        border-radius: 6px;
-        border: 1px solid #444;
-        background: #222;
-        color: #eee;
-        font-size: 13px;
-        cursor: pointer;
+    .image-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
     }
-
-    .btn:hover {
-        background: #333;
+    .image-box img {
+      width: 100%;
+      border-radius: 12px;
+      object-fit: cover;
+      max-height: 230px;
     }
-
-    .img-box {
-        text-align: center;
+    iframe {
+      border: none;
+      width: 100%;
+      height: 230px;
+      border-radius: 12px;
     }
-
-    .img-box img {
-        max-width: 100%;
-        border-radius: 8px;
-        margin-top: 8px;
+    @media (max-width: 1200px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
-
-    .img-caption {
-        font-size: 12px;
-        color: #ccc;
-        margin-top: 4px;
+    @media (max-width: 800px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      header .meta {
+        text-align: left;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
-</style>
+  </style>
 </head>
-
 <body>
-<header>DaveOS Command Center - Stable Edition</header>
-
-<div class="container">
-
-    <!-- WEATHER -->
-    <div class="widget">
-        <h2>Weather - 5 Day Forecast (Manahawkin, NJ)</h2>
-        <iframe src="https://forecast7.com/en/39d70n74d26/manahawkin/?unit=us"
-                frameborder="0"
-                style="width: 100%; height: 260px; border: none;">
-        </iframe>
+  <header>
+    <h1>DaveOS Home</h1>
+    <div class="meta">
+      <div>08050 • Manahawkin / Little Egg Harbor</div>
+      <div>Hybrid News • Dogs • Weather • Puppies • Tropical</div>
     </div>
+  </header>
 
-    <!-- NEWS: DOGS -->
-    <div class="widget">
-        <h2>News - Dogs (Top 5)</h2>
-        <ul id="news-dogs"><li>Loading...</li></ul>
-    </div>
-
-    <!-- NEWS: GENERAL -->
-    <div class="widget">
-        <h2>News - Top Stories (Top 5)</h2>
-        <ul id="news-general"><li>Loading...</li></ul>
-    </div>
-
-    <!-- ADHD / BIPOLAR / SPINAL -->
-    <div class="widget">
-        <h2>News - ADHD / Bipolar / Spinal</h2>
-
-        <strong>ADHD</strong>
-        <ul id="news-adhd"><li>Loading...</li></ul>
-
-        <strong>Bipolar</strong>
-        <ul id="news-bipolar"><li>Loading...</li></ul>
-
-        <strong>Spinal Procedures</strong>
-        <ul id="news-spinal"><li>Loading...</li></ul>
-    </div>
-
-    <!-- UPLIFTING -->
-    <div class="widget">
-        <h2>News - Uplifting Stories</h2>
-        <ul id="news-uplifting"><li>Loading...</li></ul>
-    </div>
-
-    <!-- PUPPIES + TROPICAL -->
-    <div class="widget">
-        <h2>Puppies & Tropical Views of the Day</h2>
-
-        <div class="img-box">
-            <strong>Cute Puppy of the Day</strong>
-            <img id="puppy-img" />
-            <div class="img-caption">Location available on Unsplash page</div>
+  <main>
+    <div class="grid">
+      <!-- Dogs News -->
+      <div class="widget" id="dogs-news">
+        <div class="widget-header">
+          <h2>Dogs News</h2>
+          <small>Google News RSS</small>
         </div>
+        <ul class="list" id="dogs-news-list"></ul>
+        <div class="error" id="dogs-news-error" style="display:none;">Unable to load dogs news.</div>
+      </div>
 
-        <div class="img-box" style="margin-top: 12px;">
-            <strong>Tropical View of the Day</strong>
-            <img id="tropical-img" />
-            <div class="img-caption">Location available on Unsplash page</div>
+      <!-- General News -->
+      <div class="widget" id="general-news">
+        <div class="widget-header">
+          <h2>General News</h2>
+          <small>Google News RSS</small>
         </div>
-    </div>
+        <ul class="list" id="general-news-list"></ul>
+        <div class="error" id="general-news-error" style="display:none;">Unable to load general news.</div>
+      </div>
 
-    <!-- TO-DO -->
-    <div class="widget">
-        <h2>To-Do List</h2>
-        <div id="todo-list"></div>
-        <button class="btn" onclick="addTodo()">Add Item</button>
-    </div>
-
-    <!-- SEARCH ENGINES -->
-    <div class="widget">
-        <h2>Search Engines</h2>
-        <button class="btn" onclick="openUrl('https://www.google.com')">Google</button>
-        <button class="btn" onclick="openUrl('https://www.bing.com')">Bing</button>
-        <button class="btn" onclick="openUrl('https://duckduckgo.com')">DuckDuckGo</button>
-        <button class="btn" onclick="openUrl('https://search.brave.com')">Brave</button>
-        <button class="btn" onclick="openUrl('https://www.startpage.com')">Startpage</button>
-        <button class="btn" onclick="openUrl('https://www.yahoo.com')">Yahoo</button>
-    </div>
-
-    <!-- BOOKMARKS -->
-    <div class="widget">
-        <h2>Bookmarks</h2>
-        <ul>
-            <li><a href="chrome://bookmarks" target="_blank">Chrome Bookmarks</a></li>
-            <li><a href="edge://favorites" target="_blank">Edge Favorites</a></li>
-            <li><span style="font-size:12px;color:#aaa;">Safari: Bookmarks → Edit Bookmarks</span></li>
-        </ul>
-    </div>
-
-    <!-- AI TOOLS -->
-    <div class="widget">
-        <h2>AI Tools Hub</h2>
-        <button class="btn" onclick="openUrl('https://copilot.microsoft.com')">Copilot</button>
-        <button class="btn" onclick="openUrl('https://chat.openai.com')">ChatGPT</button>
-        <button class="btn" onclick="openUrl('https://claude.ai')">Claude</button>
-        <button class="btn" onclick="openUrl('https://gemini.google.com')">Gemini</button>
-        <button class="btn" onclick="openUrl('https://www.perplexity.ai')">Perplexity</button>
-        <button class="btn" onclick="openUrl('https://www.midjourney.com/home')">Midjourney</button>
-        <button class="btn" onclick="openUrl('https://leonardo.ai')">Leonardo</button>
-        <button class="btn" onclick="openUrl('https://playgroundai.com')">Playground</button>
-        <button class="btn" onclick="openUrl('https://runwayml.com')">RunwayML</button>
-        <button class="btn" onclick="openUrl('https://elevenlabs.io')">ElevenLabs</button>
-        <button class="btn" onclick="openUrl('https://poe.com')">Poe</button>
-        <button class="btn" onclick="openUrl('https://huggingface.co/spaces')">HuggingFace</button>
-        <button class="btn" onclick="openUrl('https://notebooklm.google.com')">NotebookLM</button>
-    </div>
-
-    <!-- QUICK ACTIONS -->
-    <div class="widget">
-        <h2>Quick Actions</h2>
-        <button class="btn" onclick="openUrl('sms:')">Text Message</button>
-        <button class="btn" onclick="openUrl('https://www.messenger.com/t/')">Messenger</button>
-        <button class="btn" onclick="openUrl('mailto:')">Email</button>
-        <button class="btn" onclick="openUrl('spotify:')">Spotify</button>
-    </div>
-
-    <!-- NOTES -->
-    <div class="widget">
-        <h2>Notes</h2>
-        <textarea id="notes-box"></textarea>
-    </div>
-
-    <!-- SOLITAIRE -->
-    <div class="widget">
-        <h2>Solitaire</h2>
-        <iframe src="https://cardgames.io/solitaire/"
-                frameborder="0"
-                style="width: 100%; height: 260px; border: none;">
+      <!-- Weather -->
+      <div class="widget">
+        <div class="widget-header">
+          <h2>Weather — 08050</h2>
+          <small>Local forecast</small>
+        </div>
+        <iframe
+          src="https://forecast7.com/en/39d69n74d26/08050/?unit=us"
+          title="Weather 08050"
+          loading="lazy">
         </iframe>
+      </div>
+
+      <!-- ADHD -->
+      <div class="widget">
+        <div class="widget-header">
+          <h2>ADHD News</h2>
+          <small>JSON feed via proxy</small>
+        </div>
+        <ul class="list" id="adhd-news-list"></ul>
+        <div class="error" id="adhd-news-error" style="display:none;">Unable to load ADHD news.</div>
+      </div>
+
+      <!-- Bipolar -->
+      <div class="widget">
+        <div class="widget-header">
+          <h2>Bipolar News</h2>
+          <small>JSON feed via proxy</small>
+        </div>
+        <ul class="list" id="bipolar-news-list"></ul>
+        <div class="error" id="bipolar-news-error" style="display:none;">Unable to load bipolar news.</div>
+      </div>
+
+      <!-- Spinal -->
+      <div class="widget">
+        <div class="widget-header">
+          <h2>Spinal & Chronic Pain</h2>
+          <small>JSON feed via proxy</small>
+        </div>
+        <ul class="list" id="spinal-news-list"></ul>
+        <div class="error" id="spinal-news-error" style="display:none;">Unable to load spinal news.</div>
+      </div>
+
+      <!-- Uplifting -->
+      <div class="widget">
+        <div class="widget-header">
+          <h2>Uplifting Stories</h2>
+          <small>JSON feed via proxy</small>
+        </div>
+        <ul class="list" id="uplifting-news-list"></ul>
+        <div class="error" id="uplifting-news-error" style="display:none;">Unable to load uplifting stories.</div>
+      </div>
+
+      <!-- Puppies -->
+      <div class="widget image-box">
+        <div class="widget-header">
+          <h2>Puppies of the Day</h2>
+          <small>Unsplash via proxy</small>
+        </div>
+        <img id="puppy-image" alt="Puppy of the day">
+        <div class="error" id="puppy-error" style="display:none;">Unable to load puppy image.</div>
+      </div>
+
+      <!-- Tropical -->
+      <div class="widget image-box">
+        <div class="widget-header">
+          <h2>Tropical Escape</h2>
+          <small>Unsplash via proxy</small>
+        </div>
+        <img id="tropical-image" alt="Tropical scene">
+        <div class="error" id="tropical-error" style="display:none;">Unable to load tropical image.</div>
+      </div>
     </div>
+  </main>
 
-</div>
+  <script>
+    const PROXY = "https://api.allorigins.win/raw?url=";
 
-<script>
-function openUrl(url) {
-    window.open(url, "_blank");
-}
+    const googleFeeds = {
+      dogs: "https://news.google.com/rss/search?q=dogs&hl=en-US&gl=US&ceid=US:en",
+      general: "https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en"
+    };
 
-function loadJSONNews(query, elementId) {
-    const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(
-        "https://gnews.io/api/v4/search?q=" + query +
-        "&lang=en&country=us&max=5&apikey=demo"
-    )}`;
-
-    fetch(url)
-        .then(r => r.json())
+    function loadGoogleNews(feedUrl, listId, errorId, maxItems = 6) {
+      fetch(PROXY + encodeURIComponent(feedUrl))
+        .then(res => res.text())
+        .then(str => (new DOMParser()).parseFromString(str, "text/xml"))
         .then(data => {
-            const ul = document.getElementById(elementId);
-            ul.innerHTML = "";
-            data.articles.forEach(a => {
-                const li = document.createElement("li");
-                li.innerHTML = `<a href="${a.url}" target="_blank">${a.title}</a>`;
-                ul.appendChild(li);
-            });
+          const items = Array.from(data.querySelectorAll("item")).slice(0, maxItems);
+          const list = document.getElementById(listId);
+          list.innerHTML = "";
+          items.forEach(item => {
+            const li = document.createElement("li");
+            const title = item.querySelector("title")?.textContent || "Untitled";
+            const link = item.querySelector("link")?.textContent || "#";
+            li.innerHTML = `<a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a>`;
+            list.appendChild(li);
+          });
         })
         .catch(() => {
-            document.getElementById(elementId).innerHTML =
-                "<li>Unable to load news.</li>";
+          document.getElementById(errorId).style.display = "block";
         });
-}
+    }
 
-function loadAllNews() {
-    loadJSONNews("dogs", "news-dogs");
-    loadJSONNews("breaking news", "news-general");
-    loadJSONNews("ADHD", "news-adhd");
-    loadJSONNews("bipolar disorder", "news-bipolar");
-    loadJSONNews("spinal surgery", "news-spinal");
-    loadJSONNews("good news OR uplifting", "news-uplifting");
-}
+    loadGoogleNews(googleFeeds.dogs, "dogs-news-list", "dogs-news-error");
+    loadGoogleNews(googleFeeds.general, "general-news-list", "general-news-error");
 
-function loadImages() {
-    document.getElementById("puppy-img").src =
-        "https://source.unsplash.com/random/600x400/?puppy,dog";
-    document.getElementById("tropical-img").src =
-        "https://source.unsplash.com/random/600x400/?tropical,beach,island";
-}
+    const jsonFeeds = {
+      adhd: PROXY + encodeURIComponent("https://example.com/adhd.json"),
+      bipolar: PROXY + encodeURIComponent("https://example.com/bipolar.json"),
+      spinal: PROXY + encodeURIComponent("https://example.com/spinal.json"),
+      uplifting: PROXY + encodeURIComponent("https://example.com/uplifting.json")
+    };
 
-function loadTodos() {
-    const list = document.getElementById("todo-list");
-    list.innerHTML = "";
-    const todos = JSON.parse(localStorage.getItem("daveos-todos") || "[]");
+    function loadJsonFeed(url, listId, errorId, maxItems = 6) {
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          const list = document.getElementById(listId);
+          list.innerHTML = "";
+          const items = (data.items || data.articles || data) || [];
+          items.slice(0, maxItems).forEach(item => {
+            const title = item.title || item.headline || "Untitled";
+            const link = item.url || item.link || "#";
+            const li = document.createElement("li");
+            li.innerHTML = `<a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a>`;
+            list.appendChild(li);
+          });
+        })
+        .catch(() => {
+          document.getElementById(errorId).style.display = "block";
+        });
+    }
 
-    todos.forEach((t, i) => {
-        const div = document.createElement("div");
-        div.className = "todo-item";
+    loadJsonFeed(jsonFeeds.adhd, "adhd-news-list", "adhd-news-error");
+    loadJsonFeed(jsonFeeds.bipolar, "bipolar-news-list", "bipolar-news-error");
+    loadJsonFeed(jsonFeeds.spinal, "spinal-news-list", "spinal-news-error");
+    loadJsonFeed(jsonFeeds.uplifting, "uplifting-news-list", "uplifting-news-error");
 
-        const cb = document.createElement("input");
-        cb.type = "checkbox";
-        cb.checked = t.done;
-        cb.onchange = () => {
-            todos[i].done = cb.checked;
-            localStorage.setItem("daveos-todos", JSON.stringify(todos));
-        };
+    function loadUnsplashRandom(query, imgId, errorId) {
+      const url = "https://api.unsplash.com/photos/random?query=" +
+        encodeURIComponent(query) +
+        "&orientation=landscape&content_filter=high&client_id=YOUR_UNSPLASH_KEY";
 
-        const span = document.createElement("span");
-        span.textContent = t.text;
+      fetch(PROXY + encodeURIComponent(url))
+        .then(res => res.json())
+        .then(data => {
+          const img = document.getElementById(imgId);
+          img.src = data.urls?.regular || data.urls?.small || "";
+          img.alt = data.alt_description || query;
+        })
+        .catch(() => {
+          document.getElementById(errorId).style.display = "block";
+        });
+    }
 
-        div.appendChild(cb);
-        div.appendChild(span);
-        list.appendChild(div);
-    });
-}
-
-function addTodo() {
-    const text = prompt("New item:");
-    if (!text) return;
-
-    const todos = JSON.parse(localStorage.getItem("daveos-todos") || "[]");
-    todos.push({ text, done: false });
-    localStorage.setItem("daveos-todos", JSON.stringify(todos));
-    loadTodos();
-}
-
-function loadNotes() {
-    const box = document.getElementById("notes-box");
-    box.value = localStorage.getItem("daveos-notes") || "";
-    box.addEventListener("input", function () {
-        localStorage.setItem("daveos-notes", this.value);
-    });
-}
-
-window.onload = () => {
-    loadAllNews();
-    loadImages();
-    loadTodos();
-    loadNotes();
-};
-</script>
-
+    loadUnsplashRandom("cute puppy", "puppy-image", "puppy-error");
+    loadUnsplashRandom("tropical beach", "tropical-image", "tropical-error");
+  </script>
 </body>
 </html>
